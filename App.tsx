@@ -9,6 +9,7 @@ import { TasksTable } from './components/TasksTable';
 import { ProjectsGrid } from './components/ProjectsGrid';
 import { UsersGrid } from './components/UsersGrid';
 import { PlusIcon, SearchIcon } from './components/icons';
+import { DocumentUpload } from './components/DocumentUpload';
 
 const App: React.FC = () => {
   const [activeSection, setActiveSection] = useState<Section>('auditorias');
@@ -92,6 +93,10 @@ const App: React.FC = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
+
+  const handleUploadedTasks = (uploadedTasks: Task[]) => {
+    setTasks(prevTasks => [...uploadedTasks, ...prevTasks]);
+  };
   
   const filteredTasks = useMemo(() => {
     if (!searchTerm) return tasks;
@@ -113,16 +118,17 @@ const App: React.FC = () => {
 
     switch (activeSection) {
       case 'auditorias':
-        return (
-          <>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              <StatCard title="Total de Auditorias" value={taskStats.total} />
-              <StatCard title="In Progress" value={taskStats.inProgress} />
-              <StatCard title="Completed" value={taskStats.completed} />
-            </div>
-            <div className="bg-white rounded-lg shadow-md">
-                <div className="p-4 border-b border-gray-200 flex justify-between items-center">
-                    <h3 className="text-xl font-semibold text-gray-700">Todas las Auditorias</h3>
+          return (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <StatCard title="Total de Auditorias" value={taskStats.total} />
+                <StatCard title="In Progress" value={taskStats.inProgress} />
+                <StatCard title="Completed" value={taskStats.completed} />
+              </div>
+              <DocumentUpload onTasksCreated={handleUploadedTasks} />
+              <div className="bg-white rounded-lg shadow-md">
+                  <div className="p-4 border-b border-gray-200 flex justify-between items-center">
+                      <h3 className="text-xl font-semibold text-gray-700">Todas las Auditorias</h3>
                     <div className="relative w-full max-w-xs">
                         <input
                             type="text"
